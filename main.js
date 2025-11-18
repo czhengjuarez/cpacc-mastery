@@ -6,8 +6,8 @@ let startTime = null;
 let correctCount = 0;
 let practiceCount = 0;
 
-// API Configuration
-const API_URL = 'https://flashcards-api.petras-leonardas.workers.dev/api/flashcards';
+// API Configuration (local JSON for now, can be replaced by Cloudflare Worker endpoint later)
+const API_URL = 'flashcards.json';
 
 // DOM elements
 const flashcard = document.getElementById('flashcard');
@@ -68,7 +68,7 @@ async function loadFlashcards() {
         }
         const data = await response.json();
         
-        // Transform API data to match our format
+        // Transform API data (from local JSON or remote Worker) to match our format
         flashcards = data.map(card => ({
             id: card.card_id,
             front: card.term,
@@ -264,7 +264,8 @@ practiceBtn.addEventListener('click', handleNeedsPractice);
 // Keyboard navigation
 document.addEventListener('keydown', (e) => {
     if (e.key === ' ' || e.key === 'Enter') {
-        if (!cardFront.classList.contains('hidden')) {
+        // Use the reveal button visibility to determine whether the card is still hidden
+        if (!revealBtn.classList.contains('hidden')) {
             revealCard();
             e.preventDefault();
         }

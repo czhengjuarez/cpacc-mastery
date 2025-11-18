@@ -1,0 +1,27 @@
+[
+  {
+    "card_id": 1,
+    "term": "Medical model of disability",
+    "definition": "Disability is a problem within the individual caused by illness or injury. The focus is on medical treatment or rehabilitation to fix or manage the impairment."
+  },
+  {
+    "card_id": 2,
+    "term": "Social model of disability",
+    "definition": "Disability arises from the way society is organized, rather than from a person’s impairment or difference. Barriers in the environment and attitudes disable people."
+  },
+  {
+    "card_id": 3,
+    "term": "Reasonable accommodation",
+    "definition": "Adjustments or modifications that enable a qualified person with a disability to participate equally in an activity, without imposing undue hardship."
+  },
+  {
+    "card_id": 4,
+    "term": "Universal design",
+    "definition": "Design of products, environments, programs, and services to be usable by all people, to the greatest extent possible, without the need for adaptation or specialized design."
+  },
+   {
+    "card_id": 5,
+    "term": "Z test",
+    "definition": "you can answer anything."
+  }
+]
