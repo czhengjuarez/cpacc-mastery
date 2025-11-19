@@ -6,8 +6,8 @@ let startTime = null;
 let correctCount = 0;
 let practiceCount = 0;
 
-// API Configuration (local JSON for now, can be replaced by Cloudflare Worker endpoint later)
-const API_URL = 'flashcards.json';
+// API Configuration (relative path - same Worker serves both frontend and API)
+const API_URL = '/api/flashcards';
 
 // DOM elements
 const flashcard = document.getElementById('flashcard');
