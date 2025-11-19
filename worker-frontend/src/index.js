@@ -3,11 +3,11 @@ export default {
     const url = new URL(request.url);
 
     // API endpoint - serve flashcards from R2
-    if (url.pathname === "/api/flashcards") {
+    if (url.pathname === "/api/flashcards" || url.pathname.startsWith("/api/flashcards/")) {
       const headers = {
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
         "Access-Control-Allow-Headers": "Content-Type",
       };
 
@@ -25,6 +25,131 @@ export default {
 
         const jsonText = await object.text();
         return new Response(jsonText, { status: 200, headers });
+      }
+
+      // PUT - update an existing flashcard
+      if (request.method === "PUT") {
+        try {
+          // Extract card_id from URL path (e.g., /api/flashcards/5)
+          const pathParts = url.pathname.split('/');
+          const cardId = parseInt(pathParts[pathParts.length - 1]);
+          
+          if (isNaN(cardId)) {
+            return new Response(
+              JSON.stringify({ error: "Invalid card ID" }),
+              { status: 400, headers }
+            );
+          }
+
+          // Get existing cards
+          const object = await env.FLASHCARDS_BUCKET.get("flashcards.json");
+          if (!object) {
+            return new Response(
+              JSON.stringify({ error: "flashcards.json not found" }),
+              { status: 404, headers }
+            );
+          }
+
+          const jsonText = await object.text();
+          let cards = JSON.parse(jsonText);
+
+          // Find and update the card
+          const cardIndex = cards.findIndex(c => c.card_id === cardId);
+          if (cardIndex === -1) {
+            return new Response(
+              JSON.stringify({ error: "Card not found" }),
+              { status: 404, headers }
+            );
+          }
+
+          // Parse update data
+          const updateData = await request.json();
+          if (!updateData.term || !updateData.definition) {
+            return new Response(
+              JSON.stringify({ error: "term and definition are required" }),
+              { status: 400, headers }
+            );
+          }
+
+          // Update the card
+          cards[cardIndex] = {
+            ...cards[cardIndex],
+            term: updateData.term,
+            definition: updateData.definition
+          };
+
+          // Save back to R2
+          await env.FLASHCARDS_BUCKET.put(
+            "flashcards.json",
+            JSON.stringify(cards, null, 2)
+          );
+
+          return new Response(
+            JSON.stringify({ success: true, card: cards[cardIndex] }),
+            { status: 200, headers }
+          );
+        } catch (error) {
+          return new Response(
+            JSON.stringify({ error: error.message }),
+            { status: 500, headers }
+          );
+        }
+      }
+
+      // DELETE - remove a flashcard
+      if (request.method === "DELETE") {
+        try {
+          // Extract card_id from URL path
+          const pathParts = url.pathname.split('/');
+          const cardId = parseInt(pathParts[pathParts.length - 1]);
+          
+          if (isNaN(cardId)) {
+            return new Response(
+              JSON.stringify({ error: "Invalid card ID" }),
+              { status: 400, headers }
+            );
+          }
+
+          // Get existing cards
+          const object = await env.FLASHCARDS_BUCKET.get("flashcards.json");
+          if (!object) {
+            return new Response(
+              JSON.stringify({ error: "flashcards.json not found" }),
+              { status: 404, headers }
+            );
+          }
+
+          const jsonText = await object.text();
+          let cards = JSON.parse(jsonText);
+
+          // Find the card
+          const cardIndex = cards.findIndex(c => c.card_id === cardId);
+          if (cardIndex === -1) {
+            return new Response(
+              JSON.stringify({ error: "Card not found" }),
+              { status: 404, headers }
+            );
+          }
+
+          // Remove the card
+          cards.splice(cardIndex, 1);
+
+          // Save back to R2
+          await env.FLASHCARDS_BUCKET.put(
+            "flashcards.json",
+            JSON.stringify(cards, null, 2)
+          );
+
+          return new Response(
+            JSON.stringify({ success: true }),
+            { status: 200, headers }
+          );
+        } catch (error) {
+          return new Response(
+            JSON.stringify({ error: error.message }),
+            { status: 500, headers }
+          );
+        }
       }
 
       // POST - add a new flashcard
