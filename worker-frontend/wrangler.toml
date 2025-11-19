@@ -1,7 +1,7 @@
 name = "leo-cpacc2"
 main = "src/index.js"
 compatibility_date = "2024-11-18"
-account_id = "49117820acd5ccaea75d0736a41b51da"
+# account_id is read from CLOUDFLARE_ACCOUNT_ID environment variable
 
 # Assets binding - serves static files from a directory
 [assets]

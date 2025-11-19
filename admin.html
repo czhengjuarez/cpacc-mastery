@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Manage Flashcards</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-stone-100 min-h-screen">
+    <div class="container mx-auto max-w-4xl px-4 py-8">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-900">Manage Flashcards</h1>
+            <a href="index.html" class="px-4 py-2 text-gray-700 hover:text-gray-900">
+                ← Back to App
+            </a>
+        </div>
+
+        <!-- Add New Card Form -->
+        <div class="bg-white rounded-2xl shadow-md p-8 mb-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">Add New Card</h2>
+            <form id="add-card-form" class="space-y-4">
+                <div>
+                    <label for="term" class="block text-sm font-medium text-gray-700 mb-2">
+                        Term / Question
+                    </label>
+                    <input 
+                        type="text" 
+                        id="term" 
+                        name="term" 
+                        required
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-800 focus:border-transparent"
+                        placeholder="e.g., Medical model of disability"
+                    />
+                </div>
+                <div>
+                    <label for="definition" class="block text-sm font-medium text-gray-700 mb-2">
+                        Definition / Answer
+                    </label>
+                    <textarea 
+                        id="definition" 
+                        name="definition" 
+                        required
+                        rows="4"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-800 focus:border-transparent"
+                        placeholder="Enter the definition or answer..."
+                    ></textarea>
+                </div>
+                <button 
+                    type="submit"
+                    class="w-full px-6 py-3 bg-black text-white font-semibold rounded-lg hover:bg-gray-800 transition-all duration-200 shadow-lg hover:shadow-xl"
+                >
+                    Add Card
+                </button>
+            </form>
+            <div id="message" class="mt-4 hidden"></div>
+        </div>
+
+        <!-- Existing Cards List -->
+        <div class="bg-white rounded-2xl shadow-md p-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">Existing Cards</h2>
+            <div id="cards-list" class="space-y-4">
+                <p class="text-gray-500">Loading cards...</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+# Cloudflare credentials
+.env
+.dev.vars
+
+# Wrangler build artifacts
+.wrangler/
+worker/.wrangler/
+worker-frontend/.wrangler/
+
+# Node modules
+node_modules/
+
+# OS files
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
